@@ -1,0 +1,8 @@
+{
+  "name": "performance-improvement-introduction-hands-on-mysql",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@faker-js/faker": "^6.1.2"
+  }
+}

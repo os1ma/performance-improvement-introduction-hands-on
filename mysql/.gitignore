@@ -1,0 +1,2 @@
+/node_modules/
+/docker-entrypoint-initdb.d/1.insert.sql

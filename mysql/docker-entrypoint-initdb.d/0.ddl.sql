@@ -21,7 +21,3 @@ create table `taggings` (
   `tag_id` int not null,
   primary key(`post_id`, `tag_id`)
 );
-
-insert into `users` (`name`) values
-('Alice'),
-('Bob');
