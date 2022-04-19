@@ -34,20 +34,17 @@ ${valuesClause};`
 }
 
 function main() {
-  const userSize = 100
-  const tagSize = 100
+  const userSize = 1000
   const postsPerUser = 100
   const postsSize = userSize * postsPerUser
+
+  const tagSize = 100
   const taggingsPerPost = 5
   const taggingsSize = postsSize * taggingsPerPost
 
   const users = generateData(userSize, () => [faker.name.firstName()])
   const usersSql = generateInsertStatement('users', ['name'], users)
   console.log(usersSql)
-
-  const tags = generateData(tagSize, (index) => [`tag${index}`])
-  const tagsSql = generateInsertStatement('tags', ['name'], tags)
-  console.log(tagsSql)
 
   const posts = generateData(postsSize, (index) => {
     const userId = Math.floor(index / postsPerUser) + 1
@@ -59,6 +56,10 @@ function main() {
     posts
   )
   console.log(postsSql)
+
+  const tags = generateData(tagSize, (index) => [`tag${index}`])
+  const tagsSql = generateInsertStatement('tags', ['name'], tags)
+  console.log(tagsSql)
 
   const taggings = generateData(taggingsSize, (index) => {
     const postId = Math.floor(index / taggingsPerPost) + 1
