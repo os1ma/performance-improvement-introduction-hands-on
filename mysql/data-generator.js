@@ -16,6 +16,8 @@ function generateInsertStatement(table, columns, records) {
   const valuesClause = records
     .map((record) => {
       const cols = record
+        // ' をエスケープ
+        .map((col) => col.replaceAll("'", "\\'"))
         .map((col) => `'${col}'`)
         .reduce((col1, col2) => `${col1}, ${col2}`)
       return `(${cols})`
@@ -27,7 +29,7 @@ ${valuesClause};`
 }
 
 function main() {
-  const userSize = 10
+  const userSize = 100_000
 
   const users = generateData(userSize, () => [faker.name.firstName()])
   const sql = generateInsertStatement('users', ['name'], users)

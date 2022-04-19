@@ -15,6 +15,7 @@ readonly PROJECT_HOME="${SCRIPT_DIR}/.."
 
 cd "${PROJECT_HOME}/mysql"
 yarn install
+echo 'Generating data...'
 node data-generator.js > docker-entrypoint-initdb.d/1.insert.sql
 
 cd "${PROJECT_HOME}"
