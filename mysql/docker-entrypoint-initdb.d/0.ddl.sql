@@ -12,6 +12,8 @@ create table `posts` (
   `content` text not null
 );
 
+alter table `posts` add index (`user_id`);
+
 create table `tags` (
   `id` int primary key auto_increment,
   `name` varchar(255) not null

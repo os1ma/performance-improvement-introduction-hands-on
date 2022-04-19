@@ -65,7 +65,7 @@ function generateInsertStatement(table, columns, generator, size) {
 }
 
 function main() {
-  const userSize = 10_000
+  const userSize = 100_000
   const postsPerUser = 100
   const postsSize = userSize * postsPerUser
 
