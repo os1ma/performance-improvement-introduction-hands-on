@@ -1,17 +1,28 @@
 const { faker } = require('@faker-js/faker')
 
-function generateData(size, generator) {
-  const generated = []
-  for (let i = 0; i < size; i++) {
-    generated.push(generator(i))
+// 1 つのインサート文の最大レコード数
+const MAX_INSERT_STATEMENT_RECORDS = 1000
+
+function* createRecordGenerator(generateRecord) {
+  let index = 0
+  while (true) {
+    const record = generateRecord(index)
+    index++
+    yield record
   }
-  return generated
 }
 
-function generateInsertStatement(table, columns, records) {
-  const columnsClause = columns
-    .map((col) => `\`${col}\``)
-    .reduce((col1, col2) => `${col1}, ${col2}`)
+function generateRecords(generator, size) {
+  const records = []
+  for (let i = 0; i < size; i++) {
+    const record = generator.next().value
+    records.push(record)
+  }
+  return records
+}
+
+function generateInsertStatementPart(table, columnsClause, generator, size) {
+  const records = generateRecords(generator, size)
 
   const valuesClause = records
     .map((record) => {
@@ -29,49 +40,67 @@ function generateInsertStatement(table, columns, records) {
     })
     .reduce((record1, record2) => `${record1},\n${record2}`)
 
-  return `insert into \`${table}\` (${columnsClause}) values
+  const insertStatement = `insert into \`${table}\` (${columnsClause}) values
 ${valuesClause};`
+
+  console.log(insertStatement)
+}
+
+function generateInsertStatement(table, columns, generator, size) {
+  const columnsClause = columns
+    .map((col) => `\`${col}\``)
+    .reduce((col1, col2) => `${col1}, ${col2}`)
+
+  let remainingSize = size
+  while (remainingSize > 0) {
+    const generateSize =
+      remainingSize > MAX_INSERT_STATEMENT_RECORDS
+        ? MAX_INSERT_STATEMENT_RECORDS
+        : remainingSize
+
+    generateInsertStatementPart(table, columnsClause, generator, generateSize)
+
+    remainingSize -= generateSize
+  }
 }
 
 function main() {
-  const userSize = 1000
+  const userSize = 10_000
   const postsPerUser = 100
   const postsSize = userSize * postsPerUser
 
-  const tagSize = 100
+  const tagsSize = 100
   const taggingsPerPost = 5
   const taggingsSize = postsSize * taggingsPerPost
 
-  const users = generateData(userSize, () => [faker.name.firstName()])
-  const usersSql = generateInsertStatement('users', ['name'], users)
-  console.log(usersSql)
+  const userGenerator = createRecordGenerator(() => [faker.name.firstName()])
+  generateInsertStatement('users', ['name'], userGenerator, userSize)
 
-  const posts = generateData(postsSize, (index) => {
+  const postGenerator = createRecordGenerator((index) => {
     const userId = Math.floor(index / postsPerUser) + 1
     return [userId, faker.lorem.words(), faker.lorem.paragraphs()]
   })
-  const postsSql = generateInsertStatement(
+  generateInsertStatement(
     'posts',
     ['user_id', 'title', 'content'],
-    posts
+    postGenerator,
+    postsSize
   )
-  console.log(postsSql)
 
-  const tags = generateData(tagSize, (index) => [`tag${index}`])
-  const tagsSql = generateInsertStatement('tags', ['name'], tags)
-  console.log(tagsSql)
+  const tagGenerator = createRecordGenerator((index) => [`tag${index}`])
+  generateInsertStatement('tags', ['name'], tagGenerator, tagsSize)
 
-  const taggings = generateData(taggingsSize, (index) => {
+  const taggingGenerator = createRecordGenerator((index) => {
     const postId = Math.floor(index / taggingsPerPost) + 1
-    const tagId = (index % tagSize) + 1
+    const tagId = (index % tagsSize) + 1
     return [postId, tagId]
   })
-  const taggingSql = generateInsertStatement(
+  generateInsertStatement(
     'taggings',
     ['post_id', 'tag_id'],
-    taggings
+    taggingGenerator,
+    taggingsSize
   )
-  console.log(taggingSql)
 }
 
 main()
