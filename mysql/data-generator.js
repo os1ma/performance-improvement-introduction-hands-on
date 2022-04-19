@@ -1,7 +1,7 @@
 const { faker } = require('@faker-js/faker')
 
 // 1 つのインサート文の最大レコード数
-const MAX_INSERT_STATEMENT_RECORDS = 1000
+const MAX_INSERT_STATEMENT_RECORDS = 10000
 
 function* createRecordGenerator(generateRecord) {
   let index = 0
@@ -65,7 +65,7 @@ function generateInsertStatement(table, columns, generator, size) {
 }
 
 function main() {
-  const userSize = 100_000
+  const userSize = 10000
   const postsPerUser = 100
   const postsSize = userSize * postsPerUser
 
