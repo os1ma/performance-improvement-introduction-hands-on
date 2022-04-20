@@ -64,6 +64,10 @@ function generateInsertStatement(table, columns, generator, size) {
   }
 }
 
+function randomInt(max) {
+  return Math.floor(Math.random() * max)
+}
+
 function main() {
   const userSize = 10000
   const postsPerUser = 100
@@ -72,6 +76,10 @@ function main() {
   const tagsSize = 100
   const taggingsPerPost = 5
   const taggingsSize = postsSize * taggingsPerPost
+
+  // 1 ユーザが記事につける「いいね」の数
+  const likesPerUser = 10
+  const likesSize = userSize * likesPerUser
 
   const userGenerator = createRecordGenerator(() => [faker.name.firstName()])
   generateInsertStatement('users', ['name'], userGenerator, userSize)
@@ -100,6 +108,32 @@ function main() {
     ['post_id', 'tag_id'],
     taggingGenerator,
     taggingsSize
+  )
+
+  // あるユーザが同じ投稿に複数「いいね」しないようにデータ生成
+  const userLikedPosts = {
+    userId: null,
+    postIds: []
+  }
+  const likesGenerator = createRecordGenerator((index) => {
+    const userId = Math.floor(index / likesPerUser) + 1
+    if (userLikedPosts.userId !== userId) {
+      userLikedPosts.userId = userId
+      userLikedPosts.postIds = []
+    }
+    let postId = null
+    do {
+      postId = randomInt(postsSize) + 1
+    } while (userLikedPosts.postIds.includes(postId))
+    userLikedPosts.postIds.push(postId)
+
+    return [userId, postId]
+  })
+  generateInsertStatement(
+    'likes',
+    ['user_id', 'post_id'],
+    likesGenerator,
+    likesSize
   )
 }
 

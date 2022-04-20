@@ -24,3 +24,9 @@ create table `taggings` (
   `tag_id` int not null,
   primary key(`post_id`, `tag_id`)
 );
+
+create table `likes` (
+  `user_id` int not null,
+  `post_id` int not null,
+  primary key(`user_id`, `post_id`)
+);
