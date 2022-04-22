@@ -94,7 +94,7 @@ function main() {
       userId,
       faker.lorem.words(),
       faker.lorem.paragraphs(),
-      faker.date.between('2022-01-01T00:00:00.000Z', '2022-04-01T00:00:00.000Z') // '2026-05-16T02:22:53.002Z'
+      faker.date.between('2021-04-01T00:00:00.000Z', '2022-04-01T00:00:00.000Z')
     ]
   })
   generateInsertStatement(
