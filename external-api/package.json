@@ -1,0 +1,8 @@
+{
+  "name": "performance-improvement-introduction-hands-on-external-api",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}

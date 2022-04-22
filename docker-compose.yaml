@@ -1,5 +1,14 @@
 version: '3'
 services:
+  external-api:
+    image: node:16.14.2-alpine3.14
+    command: node main.js
+    ports:
+      - 3000:3000
+    volumes:
+      - ./external-api/:/opt/external-api/
+    working_dir: /opt/external-api/
+
   mysql:
     image: mysql:8.0.28
     platform: linux/x86_64
