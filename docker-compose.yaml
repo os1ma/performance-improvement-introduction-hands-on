@@ -6,7 +6,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./external-api/:/opt/external-api/
+      - ./dependencies/external-api/:/opt/external-api/
     working_dir: /opt/external-api/
 
   mysql:
@@ -20,4 +20,4 @@ services:
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     volumes:
-      - ./mysql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+      - ./dependencies/mysql/sqls/:/sqls/

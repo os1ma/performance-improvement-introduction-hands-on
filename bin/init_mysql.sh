@@ -4,19 +4,20 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-readonly MYSQL_DATABASE='mydb'
-readonly MYSQL_USER='myuser'
-readonly MYSQL_PASSWORD='mypassword'
-readonly DDL_FILE_IN_CONTAINER='/docker-entrypoint-initdb.d/0.ddl.sql'
-readonly INSERT_FILE_IN_CONTAINER='/docker-entrypoint-initdb.d/1.insert.sql'
-
 readonly SCRIPT_DIR="$(cd "$(dirname "$0")"; pwd)"
 readonly PROJECT_HOME="${SCRIPT_DIR}/.."
 
-cd "${PROJECT_HOME}/mysql"
+readonly MYSQL_DATABASE='mydb'
+readonly MYSQL_USER='myuser'
+readonly MYSQL_PASSWORD='mypassword'
+readonly DDL_FILE_IN_CONTAINER='/sqls/0.ddl.sql'
+readonly INSERT_FILE_IN_CONTAINER='/sqls/1.insert.sql'
+readonly INSERT_FILE_IN_HOST="${PROJECT_HOME}/dependencies/mysql/sqls/1.insert.sql"
+
+cd "${PROJECT_HOME}/dependencies/mysql"
 yarn install
 echo 'Generating data...'
-node data-generator.js > docker-entrypoint-initdb.d/1.insert.sql
+node data-generator.js > "${INSERT_FILE_IN_HOST}"
 
 cd "${PROJECT_HOME}"
 

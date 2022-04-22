@@ -2,10 +2,9 @@ require 'minitest/autorun'
 require './main'
 
 class SampleTest < Minitest::Test
-  def test_find_post_with_tag_names_array_by_user_id
+  def test_main
     100.times do
-      actual = find_post_with_tag_names_array_by_user_id(1)
-      # actual = fixed(1)
+      actual = main
 
       assert_equal 100, actual.length
     end
