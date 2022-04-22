@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "UNLICENSED",
   "dependencies": {
-    "@faker-js/faker": "^6.1.2"
+    "@faker-js/faker": "^6.1.2",
+    "moment": "^2.29.3"
   }
 }

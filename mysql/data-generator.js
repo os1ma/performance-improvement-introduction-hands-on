@@ -1,4 +1,5 @@
 const { faker } = require('@faker-js/faker')
+const moment = require('moment')
 
 // 1 つのインサート文の最大レコード数
 const MAX_INSERT_STATEMENT_RECORDS = 10000
@@ -28,7 +29,10 @@ function generateInsertStatementPart(table, columnsClause, generator, size) {
     .map((record) => {
       const cols = record
         .map((col) => {
-          if (typeof col === 'string') {
+          if (col instanceof Date) {
+            const str = moment(col).format('yyyy-MM-DD HH:mm:ss')
+            return `'${str}'`
+          } else if (typeof col === 'string') {
             const escaped = col.replaceAll("'", "\\'")
             return `'${escaped}'`
           } else {
@@ -69,7 +73,7 @@ function randomInt(max) {
 }
 
 function main() {
-  const userSize = 10000
+  const userSize = 100
   const postsPerUser = 100
   const postsSize = userSize * postsPerUser
 
@@ -86,11 +90,17 @@ function main() {
 
   const postGenerator = createRecordGenerator((index) => {
     const userId = Math.floor(index / postsPerUser) + 1
-    return [userId, faker.lorem.words(), faker.lorem.paragraphs()]
+    return [
+      userId,
+      faker.lorem.words(),
+      faker.lorem.paragraphs(),
+      // TODO 値の調整とテスト
+      faker.date.between('2022-01-01T00:00:00.000Z', '2022-04-01T00:00:00.000Z') // '2026-05-16T02:22:53.002Z'
+    ]
   })
   generateInsertStatement(
     'posts',
-    ['user_id', 'title', 'content'],
+    ['user_id', 'title', 'content', 'posted_at'],
     postGenerator,
     postsSize
   )

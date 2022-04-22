@@ -1,3 +1,5 @@
+-- データの投入を高速にするため、外部キー制約は使用していません
+
 use mydb;
 
 create table `users` (
@@ -9,7 +11,8 @@ create table `posts` (
   `id` int primary key auto_increment,
   `user_id` int not null,
   `title` varchar(255) not null,
-  `content` text not null
+  `content` text not null,
+  `posted_at` timestamp not null
 );
 
 alter table `posts` add index (`user_id`);
