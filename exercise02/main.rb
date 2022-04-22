@@ -1,56 +1,21 @@
 require 'mysql2'
 
-class PostWithTagNames
-  attr_reader :post_id, :title, :content, :tag_names
+class OutputItem
+  attr_reader :post_id, :title, :posted_at, :like_count
 
-  def initialize(post_id, title, content, tag_names)
+  def initialize(post_id, title, posted_at, like_count)
     @post_id = post_id
     @title = title
-    @content = content
-    @tag_names = tag_names
+    @posted_at = posted_at
+    @like_count = like_count
   end
 
   def to_s
-    "PostWithTagNames(post_id = #{post_id}, title = #{title}, tag_names = #{tag_names})"
+    "PostWithTagNames(post_id = #{post_id}, title = #{title}, posted_at = #{posted_at}, like_count = #{like_count})"
   end
 end
 
-def find_post_with_tag_names_array_by_user_id(user_id)
-  client = Mysql2::Client.new(
-    :host => '127.0.0.1',
-    :database => 'mydb',
-    :username => 'myuser',
-    :password => 'mypassword'
-  )
-
-  posts_stmt = client.prepare('select id, title, content from posts where user_id = ? order by id')
-  posts = posts_stmt.execute(user_id)
-  post_with_tag_names_array = posts.map do |post|
-    post_id = post['id']
-    title = post['title']
-    content = post['content']
-
-    taggingsStmt = client.prepare('select post_id, tag_id from taggings where post_id = ?')
-    taggings = taggingsStmt.execute(post_id)
-    tag_names = taggings.flat_map do |tagging|
-      tag_id = tagging['tag_id']
-
-      tagsStmt = client.prepare('select id, name from tags where id = ?')
-      tags = tagsStmt.execute(tag_id)
-      tags.map do |tag|
-        tag['name']
-      end
-    end
-
-    PostWithTagNames.new(post_id, title, content, tag_names)
-  end
-
-  client.close
-
-  post_with_tag_names_array
-end
-
-def fixed(user_id)
+def main
   client = Mysql2::Client.new(
     :host => '127.0.0.1',
     :database => 'mydb',
@@ -62,32 +27,34 @@ def fixed(user_id)
   select
     posts.id as post_id,
     posts.title as title,
-    posts.content as content,
-    tags.name as tag_name
+    posts.posted_at as posted_at,
+    likes.user_id as liked_user_id
   from posts
-  inner join taggings on taggings.post_id = posts.id
-  inner join tags on tags.id = taggings.tag_id
-  where user_id = ?
-  order by posts.id
+  left join likes on likes.post_id = posts.id
+  where '2022-03-31 00:00:00' <= posts.posted_at
+  and posts.posted_at < '2022-04-01 00:00:00'
   SQL
 
   posts_stmt = client.prepare(sql)
-  query_result = posts_stmt.execute(user_id)
-  post_with_tag_names_array = query_result.group_by do |record|
-    record['post_id']
-  end.map do |post_id, records|
-    first_record = records[0]
+  query_result = posts_stmt.execute()
 
-    title = first_record['title']
-    content = first_record['content']
-    tag_names = records.map {|r| r['tag_name']}
+  outputs = query_result.group_by {|record| record['post_id'] }
+    .map do |post_id, records|
+      first_record = records[0]
 
-    PostWithTagNames.new(post_id, title, content, tag_names)
-  end
+      title = first_record['title']
+      posted_at = first_record['posted_at']
+      like_count = records.map {|r| r['liked_user_ids']}.length
+
+      OutputItem.new(post_id, title, posted_at, like_count)
+    end
+    .sort_by {|e| [e.like_count, e.posted_at]}
+    .reverse
+    .take(10)
 
   client.close
 
-  post_with_tag_names_array
+  outputs
 end
 
 # main

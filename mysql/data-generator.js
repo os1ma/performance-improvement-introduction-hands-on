@@ -73,7 +73,7 @@ function randomInt(max) {
 }
 
 function main() {
-  const userSize = 100
+  const userSize = 10000
   const postsPerUser = 100
   const postsSize = userSize * postsPerUser
 
@@ -82,7 +82,7 @@ function main() {
   const taggingsSize = postsSize * taggingsPerPost
 
   // 1 ユーザが記事につける「いいね」の数
-  const likesPerUser = 10
+  const likesPerUser = 100
   const likesSize = userSize * likesPerUser
 
   const userGenerator = createRecordGenerator(() => [faker.name.firstName()])
@@ -94,7 +94,6 @@ function main() {
       userId,
       faker.lorem.words(),
       faker.lorem.paragraphs(),
-      // TODO 値の調整とテスト
       faker.date.between('2022-01-01T00:00:00.000Z', '2022-04-01T00:00:00.000Z') // '2026-05-16T02:22:53.002Z'
     ]
   })
