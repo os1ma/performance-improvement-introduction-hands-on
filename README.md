@@ -49,7 +49,7 @@ docker-compose up -d
 なお、MySQL には以下のコマンドで接続して SQL を実行可能です。
 
 ```console
-./bin/connext_mysql.sh
+./bin/connect_mysql.sh
 ```
 
 ### 3. 性能改善問題に挑戦
