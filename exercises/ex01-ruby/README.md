@@ -17,9 +17,5 @@
 
 ```console
 bundle install
-bundle exec ruby main_test.rb
+ruby main_test.rb
 ```
-
-## 備考
-
-性能改善の結果が見えやすいように、テストコード内では処理を loop で多数回実行しています。
