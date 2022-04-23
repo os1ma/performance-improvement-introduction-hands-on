@@ -2,7 +2,7 @@ version: '3'
 services:
   external-api:
     image: node:16.14.2-alpine3.14
-    command: node main.js
+    command: sh -c 'yarn install && exec node main.js'
     ports:
       - 3000:3000
     volumes:
