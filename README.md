@@ -1,5 +1,7 @@
 # 性能改善入門ハンズオン
 
+[![main](https://github.com/os1ma/performance-improvement-introduction-hands-on/actions/workflows/main.yaml/badge.svg)](https://github.com/os1ma/performance-improvement-introduction-hands-on/actions/workflows/main.yaml)
+
 性能改善の入門のための、ハンズオン問題です。
 
 ## 概要
