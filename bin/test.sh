@@ -76,10 +76,10 @@ cleanup() {
 }
 
 main() {
-  # initialize
+  initialize
   run_tests exercises
   run_tests answers
-  # cleanup
+  cleanup
 
   cat << EOT
 ==================
