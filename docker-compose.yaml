@@ -1,10 +1,36 @@
 version: '3'
+
+x-mysql-environment: &mysql-environment
+  MYSQL_ROOT_PASSWORD: rootpassword
+  MYSQL_DATABASE: mydb
+  MYSQL_USER: myuser
+  MYSQL_PASSWORD: mypassword
+
+x-runtime: &runtime
+  command: sleep infinity
+  volumes:
+    - ./:/opt/performance-improvement-introduction-hands-on
+  working_dir: /opt/performance-improvement-introduction-hands-on
+  environment: *mysql-environment
+
 services:
+  ruby:
+    <<: *runtime
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.ruby
+
+  python:
+    <<: *runtime
+    image: python:3.10.4-slim-bullseye
+
+  node:
+    <<: *runtime
+    image: node:16.14.2-bullseye-slim
+
   external-api:
-    image: node:16.14.2-alpine3.14
-    command: sh -c 'yarn install && exec node main.js'
-    ports:
-      - 3000:3000
+    image: node:16.14.2-bullseye-slim
+    command: bash -c 'yarn install && exec node main.js'
     volumes:
       - ./dependencies/external-api/:/opt/external-api/
     working_dir: /opt/external-api/
@@ -12,12 +38,6 @@ services:
   mysql:
     image: mysql:8.0.28
     platform: linux/x86_64
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
+    environment: *mysql-environment
     volumes:
       - ./dependencies/mysql/sqls/:/sqls/

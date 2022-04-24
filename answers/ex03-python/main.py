@@ -8,7 +8,7 @@ MAX_POST_ID = 100
 
 async def get_post(post_id):
     loop = asyncio.get_event_loop()
-    response = await loop.run_in_executor(None, requests.get, f'http://localhost:3000/api/posts/{post_id}')
+    response = await loop.run_in_executor(None, requests.get, f'http://external-api:3000/api/posts/{post_id}')
     return response.json()
 
 

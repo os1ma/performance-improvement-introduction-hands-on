@@ -14,10 +14,10 @@ end
 
 def main
   client = Mysql2::Client.new(
-    :host => '127.0.0.1',
-    :database => 'mydb',
-    :username => 'myuser',
-    :password => 'mypassword'
+    :host => 'mysql',
+    :database => ENV['MYSQL_DATABASE'],
+    :username => ENV['MYSQL_USER'],
+    :password => ENV['MYSQL_PASSWORD']
   )
 
   sql = <<~SQL

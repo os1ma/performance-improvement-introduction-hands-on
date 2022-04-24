@@ -4,17 +4,15 @@
 
 ## 概要
 
-性能改善対象のスクリプトは、DB (MySQL) と外部 API (Express) に依存しています。
+性能改善対象のスクリプトが、Ruby・Python・JavaScript (Node.js) で記述されています。
 
-これらを Docker で起動した上で、性能改善対象のスクリプトを修正していくことになります。
+これらは DB (MySQL) と外部 API (Express) に依存しています。
 
-また、性能改善対象のスクリプトは、Ruby・Python・JavaScript (Node.js) で記述されています。
+性能改善対象のスクリプト実行環境や、依存先の DB、外部 API を Docker で起動した上で、性能改善対象のスクリプトを修正していきます。
 
 ## 依存関係
 
 - Docker (Docker Compose)
-- 性能改善問題が書かれている言語の実行環境
-  - 各種言語のバージョンは asdf のバージョン指定ファイルである、[.tool-versions](.tool-versions) に記載しています。
 
 注意: M1 Mac などの ARM プロセッサでの動作は保証していません。
 
@@ -55,3 +53,11 @@ docker-compose up -d
 ### 3. 性能改善問題に挑戦
 
 exercises ディレクトリ以下の問題に挑戦してください。
+
+なお、各言語の実行環境となるコンテナには、以下のコマンドでログインできます。
+
+```console
+docker-compose exec ruby bash
+```
+
+※ 最後の引数には、Ruby を使う場合は `ruby`、Python を使う場合は `python`、Node.js を使う場合は `node` を指定してください。

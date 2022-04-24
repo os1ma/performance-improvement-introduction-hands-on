@@ -15,10 +15,10 @@ def main
   user_id = 1
 
   client = Mysql2::Client.new(
-    :host => '127.0.0.1',
-    :database => 'mydb',
-    :username => 'myuser',
-    :password => 'mypassword'
+    :host => 'mysql',
+    :database => ENV['MYSQL_DATABASE'],
+    :username => ENV['MYSQL_USER'],
+    :password => ENV['MYSQL_PASSWORD']
   )
 
   posts_stmt = client.prepare('select id, title, content from posts where user_id = ? order by id')

@@ -12,14 +12,16 @@ class OutputItem
   end
 end
 
-# 以下の SQL を実行した上で、コードも変更してください
+#
+# コードの変更に加えて、以下のようにしてインデックスも追加してください
 # alter table `posts` add index (`posted_at`);
+#
 def main
   client = Mysql2::Client.new(
-    :host => '127.0.0.1',
-    :database => 'mydb',
-    :username => 'myuser',
-    :password => 'mypassword'
+    :host => 'mysql',
+    :database => ENV['MYSQL_DATABASE'],
+    :username => ENV['MYSQL_USER'],
+    :password => ENV['MYSQL_PASSWORD']
   )
 
   sql = <<~SQL
