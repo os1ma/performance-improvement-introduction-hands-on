@@ -18,12 +18,52 @@ initialize() {
   ./bin/init_mysql.sh
 }
 
+run_test() {
+  local ex="$1"
+  local runtime="$2"
+
+  case "${runtime}" in
+    'ruby')
+      docker-compose exec ruby bash -c "
+        cd "${ex}${runtime}" \
+        && bundle install \
+        && ruby main_test.rb
+      "
+      ;;
+    'python')
+      docker-compose exec python bash -c "
+        cd "${ex}${runtime}" \
+        && pip install -r requirements.txt \
+        && python main_test.py
+      "
+      ;;
+    'node')
+      echo '[WARNING] Test for Node.js is not implemented.'
+      ;;
+    *)
+      echo "Unexpected runtime '${runtime}'" >&2
+      exit 1
+      ;;
+  esac
+}
+
 run_tests() {
-  docker-compose exec ruby bash -c '
-    cd exercises/ex01/ruby \
-    && bundle install \
-    && ruby main_test.rb
-  '
+  # exercises/ex01 など、exercises 以下のディレクトリ一覧を取得
+  local exercises="$(ls -d exercises/*/)"
+
+  for ex in ${exercises[@]}; do
+    cd "${PROJECT_HOME}/${ex}"
+
+    # ruby/ などの、言語ごとのディレクトリ一覧を取得
+    local runtime_dirs="$(ls -d */)"
+    for runtime_dir in ${runtime_dirs[@]}; do
+
+      # ruby などのランタイム名を取得
+      local runtime="$(basename ${runtime_dir})"
+
+      run_test "${ex}" "${runtime}"
+    done
+  done
 }
 
 cleanup() {
@@ -31,9 +71,9 @@ cleanup() {
 }
 
 main() {
-  initialize
+  # initialize
   run_tests
-  cleanup
+  # cleanup
 
   cat << EOT
 ==================
