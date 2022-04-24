@@ -22,16 +22,22 @@ node data-generator.js > "${INSERT_FILE_IN_HOST}"
 cd "${PROJECT_HOME}"
 
 echo 'Dropping database...'
-docker-compose exec mysql \
-  mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" \
+docker-compose exec \
+  -e MYSQL_PWD="${MYSQL_PASSWORD}" \
+  mysql \
+  mysql -u"${MYSQL_USER}" "${MYSQL_DATABASE}" \
   -e 'drop database mydb; create database mydb;'
 
 echo 'Loading DDL...'
-docker-compose exec mysql \
+docker-compose exec \
+  -e MYSQL_PWD="${MYSQL_PASSWORD}" \
+  mysql \
   bash -c \
-    "mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" < "${DDL_FILE_IN_CONTAINER}""
+    "mysql -u"${MYSQL_USER}" "${MYSQL_DATABASE}" < "${DDL_FILE_IN_CONTAINER}""
 
 echo 'Loading insert...'
-docker-compose exec mysql \
+docker-compose exec \
+  -e MYSQL_PWD="${MYSQL_PASSWORD}" \
+  mysql \
   bash -c \
-    "mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" < "${INSERT_FILE_IN_CONTAINER}""
+    "mysql -u"${MYSQL_USER}" "${MYSQL_DATABASE}" < "${INSERT_FILE_IN_CONTAINER}""
