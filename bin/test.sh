@@ -48,8 +48,13 @@ run_test() {
 }
 
 run_tests() {
-  # exercises/ex01 など、exercises 以下のディレクトリ一覧を取得
-  local exercises="$(ls -d exercises/*/)"
+  # exercises や answers
+  local target_dir="$1"
+
+  cd "${PROJECT_HOME}"
+
+  # exercises/ex01 など、target_dir 以下のディレクトリ一覧を取得
+  local exercises="$(ls -d "${target_dir}"/*/)"
 
   for ex in ${exercises[@]}; do
     cd "${PROJECT_HOME}/${ex}"
@@ -72,7 +77,8 @@ cleanup() {
 
 main() {
   # initialize
-  run_tests
+  run_tests exercises
+  run_tests answers
   # cleanup
 
   cat << EOT
