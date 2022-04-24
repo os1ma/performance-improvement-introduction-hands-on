@@ -12,14 +12,14 @@ readonly MYSQL_USER='myuser'
 readonly MYSQL_PASSWORD='mypassword'
 readonly DDL_FILE_IN_CONTAINER='/sqls/0.ddl.sql'
 readonly INSERT_FILE_IN_CONTAINER='/sqls/1.insert.sql'
-readonly INSERT_FILE_IN_HOST="${PROJECT_HOME}/dependencies/mysql/sqls/1.insert.sql"
-
-cd "${PROJECT_HOME}/dependencies/mysql"
-yarn install
-echo 'Generating data...'
-node data-generator.js > "${INSERT_FILE_IN_HOST}"
 
 cd "${PROJECT_HOME}"
+
+echo 'Generating data...'
+docker-compose exec \
+  node \
+  bash -c \
+    "cd ./dependencies/mysql && yarn install && node data-generator.js > ./sqls/1.insert.sql"
 
 echo 'Dropping database...'
 docker-compose exec \
