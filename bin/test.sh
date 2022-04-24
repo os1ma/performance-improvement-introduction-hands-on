@@ -24,14 +24,14 @@ run_test() {
 
   case "${runtime}" in
     'ruby')
-      docker-compose exec ruby bash -c "
+      docker-compose exec -T ruby bash -c "
         cd "${ex}${runtime}" \
         && bundle install \
         && ruby main_test.rb
       "
       ;;
     'python')
-      docker-compose exec python bash -c "
+      docker-compose exec -T python bash -c "
         cd "${ex}${runtime}" \
         && pip install -r requirements.txt \
         && python main_test.py
