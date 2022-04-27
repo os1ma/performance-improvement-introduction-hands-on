@@ -4,6 +4,7 @@ GEM
     mysql2 (0.5.3)
 
 PLATFORMS
+  aarch64-linux
   x86_64-linux
 
 DEPENDENCIES
