@@ -1,0 +1,14 @@
+{
+  "name": "performance-improvement-introduction-hands-ex04",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}
