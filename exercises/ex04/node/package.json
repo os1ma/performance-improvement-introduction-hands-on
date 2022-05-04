@@ -2,13 +2,7 @@
   "name": "performance-improvement-introduction-hands-ex04",
   "version": "1.0.0",
   "license": "UNLICENSED",
-  "scripts": {
-    "test": "jest"
-  },
   "dependencies": {
     "@faker-js/faker": "^6.1.2"
-  },
-  "devDependencies": {
-    "jest": "^27.5.1"
   }
 }

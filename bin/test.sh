@@ -38,7 +38,11 @@ run_test() {
       "
       ;;
     'node')
-      echo '[WARNING] Test for Node.js is not implemented.'
+      docker-compose exec -T node bash -c "
+        cd "${ex}${runtime}" \
+        && yarn install \
+        && yarn test
+      "
       ;;
     *)
       echo "Unexpected runtime '${runtime}'" >&2
@@ -54,7 +58,8 @@ run_tests() {
   cd "${PROJECT_HOME}"
 
   # exercises/ex01 など、target_dir 以下のディレクトリ一覧を取得
-  local exercises="$(ls -d "${target_dir}"/*/)"
+  # ただし、ex04 はテスト未実装のため除外
+  local exercises="$(ls -d "${target_dir}"/*/ | grep -v ex04)"
 
   for ex in ${exercises[@]}; do
     cd "${PROJECT_HOME}/${ex}"
