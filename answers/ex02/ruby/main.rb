@@ -1,4 +1,5 @@
 require 'mysql2'
+require 'json'
 
 #
 # コードの変更に加えて、以下のようにしてインデックスも追加してください
@@ -40,7 +41,7 @@ def main
       {
         postId: post_id,
         title: title,
-        postedAt: posted_at,
+        postedAt: posted_at.to_s,
         likeCount: like_count
       }
     end

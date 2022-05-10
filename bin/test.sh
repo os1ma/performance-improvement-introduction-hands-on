@@ -14,7 +14,7 @@ initialize() {
   docker-compose up -d
 
   echo 'Wait for starting MySQL container...'
-  sleep 60
+  sleep 10
   ./bin/init_mysql.sh
 }
 

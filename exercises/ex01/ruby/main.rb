@@ -1,4 +1,5 @@
 require 'mysql2'
+require 'json'
 
 def main
   user_id = 1

@@ -35,9 +35,21 @@ docker-compose exec -T \
   bash -c \
     "mysql -u"${MYSQL_USER}" "${MYSQL_DATABASE}" < "${DDL_FILE_IN_CONTAINER}""
 
-echo 'Loading insert...'
+echo 'Loading Data...'
 docker-compose exec -T \
   -e MYSQL_PWD="${MYSQL_PASSWORD}" \
   mysql \
   bash -c \
     "mysql -u"${MYSQL_USER}" "${MYSQL_DATABASE}" < "${INSERT_FILE_IN_CONTAINER}""
+
+echo 'Generating expected values...'
+docker-compose exec -T ruby bash -c "
+  cd ./answers/ex01/ruby \
+  && bundle install > /dev/null \
+  && ruby main.rb
+" > "${PROJECT_HOME}/expected/ex01.json"
+docker-compose exec -T ruby bash -c "
+  cd ./answers/ex02/ruby \
+  && bundle install > /dev/null \
+  && ruby main.rb
+" > "${PROJECT_HOME}/expected/ex02.json"

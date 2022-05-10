@@ -1,5 +1,6 @@
 require 'mysql2'
 require 'time'
+require 'json'
 
 def main
   client = Mysql2::Client.new(
@@ -33,13 +34,12 @@ def main
       {
         postId: post_id,
         title: title,
-        postedAt: posted_at,
+        postedAt: posted_at.to_s,
         likeCount: like_count
       }
     end
     .filter do |outputItem|
-      posted_at = outputItem[:postedAt]
-
+      posted_at = Time.parse(outputItem[:postedAt])
       Time.parse('2022-03-31 00:00:00') <= posted_at && posted_at < Time.parse('2022-04-01 00:00:00')
     end
     .sort_by {|e| [e[:likeCount], e[:postedAt]]}
