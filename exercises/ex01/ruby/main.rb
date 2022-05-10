@@ -23,7 +23,7 @@ def main
 
   posts_stmt = client.prepare('select id, title, content from posts where user_id = ? order by id')
   posts = posts_stmt.execute(user_id)
-  outputs = posts.map do |post|
+  output = posts.map do |post|
     post_id = post['id']
     title = post['title']
     content = post['content']
@@ -43,7 +43,7 @@ def main
 
   client.close
 
-  outputs
+  output
 end
 
 if __FILE__ == $0

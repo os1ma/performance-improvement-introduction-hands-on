@@ -36,7 +36,7 @@ def main
 
   posts_stmt = client.prepare(sql)
   query_result = posts_stmt.execute(user_id)
-  outputs = query_result
+  output = query_result
     .group_by {|record| record['post_id'] }
     .map do |post_id, records|
       first_record = records[0]
@@ -50,7 +50,7 @@ def main
 
   client.close
 
-  outputs
+  output
 end
 
 if __FILE__ == $0

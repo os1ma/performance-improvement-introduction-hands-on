@@ -35,14 +35,14 @@ def main
   where '2022-03-31 00:00:00' <= posts.posted_at
   and posts.posted_at < '2022-04-01 00:00:00'
   group by posts.id
-  order by like_count, posted_at desc
+  order by like_count desc, posted_at desc
   limit 10
   SQL
 
   posts_stmt = client.prepare(sql)
   query_result = posts_stmt.execute()
 
-  outputs = query_result
+  output = query_result
     .map do |record|
       post_id = record['post_id']
       title = record['title']
@@ -54,7 +54,7 @@ def main
 
   client.close
 
-  outputs
+  output
 end
 
 if __FILE__ == $0
