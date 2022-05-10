@@ -122,3 +122,13 @@ exit
 スクリプトを改善してみてください。
 
 コンテナ内とホストでスクリプトのファイルは共有されているので、ホスト上で VSCode などを使って編集すれば、コンテナ内にも反映されます。
+
+## 参考情報
+
+### MySQL のテーブル定義
+
+ハンズオンで使用する MySQL の ER 図は以下の通りです。
+
+![dbdiagramio.png](./dependencies/mysql/doc/dbdiagramio.png)
+
+DDL は [こちら](./dependencies/mysql/sqls/0.ddl.sql) です。

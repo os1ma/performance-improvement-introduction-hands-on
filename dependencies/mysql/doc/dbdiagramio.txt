@@ -1,0 +1,34 @@
+// (dbdiagram.io)[https://dbdiagram.io/home]
+
+Table users {
+  id int [pk, increment]
+  name varchar(255)
+}
+
+Table posts {
+  id int [pk, increment]
+  user_id int [not null]
+  title varchar(255) [not null]
+  content text [not null]
+}
+
+Table tags {
+  id int [pk, increment]
+  name varchar(255) [not null]
+}
+
+Table taggings {
+  post_id int [not null]
+  tag_id int [not null]
+}
+
+Table likes {
+  user_id int [not null]
+  post_id int [not null]
+}
+
+Ref: posts.user_id > users.id
+Ref: taggings.post_id > posts.id
+Ref: taggings.tag_id > tags.id
+Ref: likes.user_id > users.id
+Ref: likes.post_id > posts.id
