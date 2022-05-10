@@ -53,3 +53,9 @@ docker-compose exec -T ruby bash -c "
   && bundle install > /dev/null \
   && ruby main.rb
 " > "${PROJECT_HOME}/expected/ex02.json"
+
+cat << EOT
+=================================
+MySQL initialization succeeded!!!
+=================================
+EOT
