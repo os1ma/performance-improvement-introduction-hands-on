@@ -1,16 +1,5 @@
 require 'mysql2'
 
-class OutputItem
-  attr_reader :post_id, :title, :content, :tag_names
-
-  def initialize(post_id, title, content, tag_names)
-    @post_id = post_id
-    @title = title
-    @content = content
-    @tag_names = tag_names
-  end
-end
-
 def main
   user_id = 1
 
@@ -38,7 +27,12 @@ def main
       tags.map {|tag| tag['name']}
     end
 
-    OutputItem.new(post_id, title, content, tag_names)
+    {
+      postId: post_id,
+      title: title,
+      content: content,
+      tagNames: tag_names
+    }
   end
 
   client.close
@@ -47,5 +41,6 @@ def main
 end
 
 if __FILE__ == $0
-  main
+  output = main
+  puts JSON.pretty_generate(output)
 end

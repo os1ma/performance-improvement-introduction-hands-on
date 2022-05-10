@@ -1,16 +1,4 @@
 require 'mysql2'
-require 'time'
-
-class OutputItem
-  attr_reader :post_id, :title, :posted_at, :like_count
-
-  def initialize(post_id, title, posted_at, like_count)
-    @post_id = post_id
-    @title = title
-    @posted_at = posted_at
-    @like_count = like_count
-  end
-end
 
 #
 # コードの変更に加えて、以下のようにしてインデックスも追加してください
@@ -49,7 +37,12 @@ def main
       posted_at = record['posted_at']
       like_count = record['like_count']
 
-      OutputItem.new(post_id, title, posted_at, like_count)
+      {
+        postId: post_id,
+        title: title,
+        postedAt: posted_at,
+        likeCount: like_count
+      }
     end
 
   client.close
@@ -58,5 +51,6 @@ def main
 end
 
 if __FILE__ == $0
-  main
+  output = main
+  puts JSON.pretty_generate(output)
 end
